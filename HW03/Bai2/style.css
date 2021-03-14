@@ -181,6 +181,9 @@ footer{
         width: 29%;
         margin: 10px;
     } */
+    #aside-right{
+      display: none;
+    }
 
 }
 @media only screen and (max-width: 768px) {
