@@ -81,3 +81,7 @@ Route::prefix('cat')->group(function () {
     Route::post('/update',['as'=>'update_to_cart','uses'=>'App\Http\Controllers\CartController@updateToCart']);
     Route::get('/remove/{id}',['as'=>'remove_from_cart','uses'=>'App\Http\Controllers\CartController@removeFromCart']);
 });
+Route::post('/insert-rating','App\Http\Controllers\PageController@insert_rating')->name('insert_rating');
+Route::post('/load-comment','App\Http\Controllers\PageController@load_comment');
+Route::post('/send-comment','App\Http\Controllers\PageController@send_comment')->name('ajax');
+// Route::get('ajax/{task}',['as'=>'ajax','uses'=>'App\Http\Controllers\PageController@ajax']);

@@ -326,3 +326,18 @@ ul.dropdown-columnar li:hover ul {
 ul.dropdown ul li a{
 	 color:#000 !important;
 	}
+ul.list-inline {
+	    list-style: none;
+	}
+.comment {
+    margin-top: 340px;
+    margin-left: 272px;
+}
+form#form_comment {
+    /* float: left; */
+    margin-right: 151px;
+    margin-top: 11px;
+}
+.quickreview h6 {
+    padding: 15px 0px 5px 0px;
+}

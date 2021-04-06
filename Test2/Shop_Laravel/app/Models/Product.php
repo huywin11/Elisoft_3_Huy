@@ -8,10 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
   protected $table= "nn_product";
+  public $timestamps = false;
 
   public function category()
   {
     return $this->belongsTo('App/Models/Category','id','id');
+  }
+  public function Rating()
+  {
+    return $this->hasMany('App/Models/Rating');
   }
 
   public function getProduct()
@@ -21,14 +26,6 @@ class Product extends Model
       // print_r(  $get_product);die();
      return $get_product;
   }
-  // public function  updateView()
-  // {
-  //   $postId = 'xxx';
-  //   $updateViews=db::table(Product)->where('id',$postId) 'UPDATE table_posts SET views = views + 1 WHERE id = ' . $postId . ');
-  //   $updateViews=Product::
-  //   $post = PostModel::findOrFail($postId);
-  //   $post->increment('views');
-  // }
 
 
 }

@@ -32,7 +32,6 @@
 	<div id="masthead">
     	<div class="secnd_navi">
         	<ul class="links">
-
 							 @if(Auth::check())
                 <li><a href="account.html">Xin chào {{Auth::user()->name}}</a></li>
                 <li><a href="account.html">My Account</a></li>
@@ -74,11 +73,6 @@
                 <li><a href="static.html">Giới thiệu</a></li>
                 <li class="dir"><a href="#">Sản phẩm</a>
                     <ul class="bordergr big">
-
-											<?php
-											// print_r($department);
-											// die();
-											?>
 												@foreach($new_department as $d)
                         <li class="dir"><span class="colr navihead bold">	{{$d['name']}}</span>
                             <ul>
@@ -134,17 +128,6 @@
         <div class="clear"></div>
     </div>
     <div class="clear"></div>
-    <!-- Banner Section -->
-	<!--<div id="banner">
-    	<div id="slider4" class="nivoSlider">
-			<a href="detail.html"><img src="images/banner1.jpg" alt="" ></a>
-			<a href="detail.html"><img src="images/banner2.jpg" alt="" ></a>
-            <a href="detail.html"><img src="images/banner3.jpg" alt="" ></a>
-            <a href="detail.html"><img src="images/banner4.jpg" alt="" ></a>
-		</div>
-        <script type="text/javascript" src="js/jquery.nivo.slider.pack.js"></script>
-		<script type="text/javascript" src="js/nivo.js"></script>
-    </div>-->
     <div class="clear"></div>
     <!-- Scroolling Products -->
     <div class="content_sec">

@@ -32,12 +32,11 @@
 	<div id="masthead">
     	<div class="secnd_navi">
         	<ul class="links">
-
 							 @if(Auth::check())
                 <li><a href="account.html">Xin chào {{Auth::user()->name}}</a></li>
                 <li><a href="account.html">My Account</a></li>
                 <li><a href="#">My Wishlist</a></li>
-                <li><a href="cart.html">My Cart</a></li>
+                <li><a href="{{route('cart')}}">My Cart</a></li>
                 <li><a href="#">Checkout</a></li>
 								<li class="last"><a href="{{route('register')}}">Register</a></li>
                 <li class="last"><a href="{{route('logout')}}">Logout</a></li>

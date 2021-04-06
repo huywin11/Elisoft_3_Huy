@@ -1,20 +1,10 @@
 
 <?php
-        // foreach($items as $item){
-        //     echo"<pre>";
-        //     print_r($item);
-        //     echo"</pre>";
-
-        //     //echo $item[$item->id];
-        // }
-
-        $_REQUEST['module'] = 'cart';
+$_REQUEST['module'] = 'cart';
 ?>
 @extends('index')
 @section('content')
-    <div class="col3">
-        <div class="col3_top">&nbsp;</div>
-        <div class="col3_center">
+        <div class="col2_center">
             <h2 class="heading colr">BedSheets</h2>
             <div class="shoppingcart">
             <ul class="tablehead">
@@ -28,24 +18,27 @@
             <form id='update_qty' action="{{route('update_to_cart')}}" method='post'>
             @csrf
             @if($items)
-
             @foreach($items as $item)
+
             <ul class="cartlist gray">
                 <li class="remove txt"><a onClick="return confirm('Sure?')" href="{{route('remove_from_cart',$item['item']['id'])}}"><img src="source/images/delete.gif" alt="" ></a></li>
                 <li class="thumb"><a href="detail.html"><img src="source/images/product//{{$item['item']['img_url']}}" alt="" ></a></li>
                 <li class="title txt"><a href="detail.html">{{$item['item']['name']}}</a></li>
                 <li class="price txt">{{$item['item']['price']/1000000}} Tr</li>
-                <li class="qty"><input name="{{$item['item']['id']}}" type="text" value="{{$item['qty']}}" ></li>
-                <li class="total txt">{{$item['item']['price']/1000000}} Tr</li>
+                <li class="qty"><input name="{{$item['item']['id']}}" type="number" value="{{$item['qty']}}" class="bar"></li>
+                <li class="total txt">{{$item['price']/1000000}} Tr</li>
             </ul>
+
             @endforeach
             @endif
             </form>
             <div class="clear"></div>
             <div class="subtotal">
                 <a href="listing.html" class="simplebtn"><span>Continue Shopping</span></a>
+                @if(count($items))
                 <a href="javascript:" onclick= "document.getElementById('update_qty').submit();" class="simplebtn"><span>Update</span></a>
                 <a href="#" class="simplebtn"><span>Checkout</span></a>
+                @endif
                 <h3 class="colr">{{$totalPrice/1000000}} Tr</h3>
             </div>
             <div class="clear"></div>
@@ -127,29 +120,8 @@
                     <div class="sec_botm">&nbsp;</div>
                 </div>
                 </div>
-                <div class="grand_total">
-                    <ul>
-                        <li class="title">Subtotal</li>
-                        <li class="price bold">$349.99</li>
-                    </ul>
-                    <ul>
-                        <li class="title"><h5>Grand total</h5></li>
-                        <li class="price"><h5>$349.99</h5></li>
-                    </ul>
-                    <div class="clear"></div>
-                    <a href="#" class="proceed right">Proceed to Checkout</a>
-                    <div class="clear"></div>
-                    <a href="#" class="right">Checkout with Multiple Addresses</a>
-                    <div class="clear"></div>
-                    <div class="sec_botm">&nbsp;</div>
-                </div>
             </div>
             </div>
-        </div>
-            <div class="clear"></div>
-        </div>
-        <div class="clear"></div>
-        <div class="col3_botm">&nbsp;</div>
-    </div>
+
 
 @endsection

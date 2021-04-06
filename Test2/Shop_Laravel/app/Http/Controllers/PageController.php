@@ -8,11 +8,14 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\User;
 use App\Models\Cart;
+use App\Models\Rating;
+use App\Models\Comment;
 use Hash;
 use Auth;
 use add;
 use content;
 use Carbon\Carbon;
+use Session;
 use App\Services\Vietnamese;
 
 class PageController extends Controller
@@ -31,16 +34,12 @@ class PageController extends Controller
       $new_product = $product->getProduct();
       return view('page.trangchu',compact('new_department','new_category','new_product','dt'));
     }
-    public function getnoProduct()
+    public function getnoProduct(Request $req)
     {
-      // // $tran = new Vietnamese();
-      // echo $vn->toASCII("Xã Hội Này của chúng ta ");
-      //   die();
-
-
       $category = new Category();
       $new_category = $category->getCategory();
-      return view('page.noProduct',compact('new_category','category'));
+      $nameListing = Category::where('id',$req->id)->get();
+      return view('page.noProduct',compact('new_category','category','nameListing'));
     }
     public function getProduct()
     {
@@ -50,21 +49,49 @@ class PageController extends Controller
     }
     public function getDetailProduct(Request $req)
     {
+        //dd(Session::get('view'));
+        $id = $req->id;
         $department = new Department();
         $category = new Category();
         $product = new Product();
         $new_department = $department->getDepartment();
         $new_category = $category->getCategory();
         $new_product = $product->getProduct();
-       $Detail = Product::where('id',$req->id)->first();
-            // $view =Product::where('id',$req->id)->update(['view' =>('view','+',1)])->get();
+        $Detail = Product::where('id',$req->id)->first();
+        $rating = Rating::where('product_id',$req->id)->avg('star');
+        $rating = round($rating);
+        $tt_Detail =Product::where('category_id',$Detail->category_id)->limit(10)->get();
+        $productView =Product::where('id',$req->id)->first();
+        $comment = Comment::where('comment_id',$req->id)->first();
+        // $cmt = Comment::where('comment_id',$req->id)->count('cmt');
+        $rating = round($rating);
+          $user = Auth::user();
+          $view = (Session::get('view'));
+          if ($view != null && in_array($id, $view)) {
 
-       $tt_Detail =Product::where('category_id',$Detail->category_id)->limit(10)->get();
+            // echo "có rồi";
+            // die();
+        }
+        else {
+            //echo "CHưa có";
+            $pr = Product::find($id);
+            Product::where('id', $id)->update(['view'=>$pr->view + 1]);
+        };
+        if(Session::get('view') == null){
+           // set products.name as array
+            session()->put('view', []);
+            // somewhere later
+            session()->push('view', $id);
+        }
+        else{
+            $view = Session::get('view');
+            session()->put('view', $view);
+            session()->push('view', $id);
 
-       $productView =Product::where('id',$req->id)->first();
-       $productView->view =$productView->view + 1;
-       // $productView->save();
-         return view('detail',compact('Detail','tt_Detail','productView','new_department','new_category','new_product'));
+        }
+
+
+         return view('detail',compact('Detail','rating','tt_Detail','user','productView','new_department','new_category','new_product','comment'));
     }
     public function getListingProduct(Request $req)
     {       $department = new Department();
@@ -73,9 +100,12 @@ class PageController extends Controller
             $new_department = $department->getDepartment();
             $new_category = $category->getCategory();
             $new_product = $product->getProduct();
-         $Listing = Product::where('category_id',$req->category_id)->paginate(10);
-         $nameListing = Category::where('id',$req->id)->get();
-         return view('listing',compact('Listing','new_department','new_category','new_product','nameListing'));
+            $rating = Rating::where('product_id',$req->id)->avg('star');
+            $rating = round($rating);
+            $Listing = Product::where('category_id',$req->category_id)->paginate(10);
+            $nameListing = Category::where('id',$req->category_id)->first();
+
+         return view('listing',compact('Listing','new_department','new_category','new_product','nameListing','rating'));
     }
     public function getLogin()
     {
@@ -197,11 +227,7 @@ class PageController extends Controller
       $price=$product->price;
       $img_url=$product->img_url;
       $cart =['id'=>$id,'name'=>$product->name,'qty'=>$qty,'price'=>$price,'img_url'=>$product->img_url];
-      // Cart::add($cart);
-      // dd($cart);
-
           $total = $price * $qty;
-
          $Listing = Product::where('category_id',$req->category_id)->paginate(10);
          return view('page.Cart',compact('Product','new_department','new_category','new_product','Listing','product','qty','price','cart','img_url','total'));
     }
@@ -213,9 +239,51 @@ class PageController extends Controller
       $new_department = $department->getDepartment();
       $new_category = $category->getCategory();
       $new_product = $product->getProduct();
-      $Products = Product::where('name','like','%'.$req->key.'%')->get();//tìm theo tên,phương thức là like,nếu có sản phẩm trong key(Key là name của thanh search) thì nó sẽ return ra.  //phương thức like phải đi kèm với % để tìm theo từ khóa chứ không cần đúng y tên,dùng nối chuỗi để nối % vs keywork
-                        //lấy hết dữ liệu ra và. đổ về 1 trang mới thì viết bên dưới
-      return   view('page.Search',compact('Products','new_department','new_category','new_product'));//trả về page search và mình truyền dữ liệu của mình về có tên là product
-
+      $Products = Product::where('name','like','%'.$req->key.'%')->get();
+      return   view('page.Search',compact('Products','new_department','new_category','new_product'));
     }
+    public function insert_rating(Request $req)
+      {
+      $data  = $req->all();
+      $rating = new Rating();
+      $rating->product_id = $data['product_id'];
+      $rating->rating =$data['index'];
+      $rating->save();
+      echo "done";
+      }
+    public function send_comment(Request $req)
+      {
+        print_r($req);
+        $product_id  = $req->product_id;
+        $comment_name = $req->comment_name;
+        $comment_content = $req->comment_content;
+        $comment = new comment();
+        $comment->comment =$comment_content;
+        $comment->comment_name =$comment_name;
+        $comment->comment_product_id =$product_id;
+        $comment->save();
+        echo "done";
+      }
+      public function ajax(Request $request){
+          if($request->task == 'rating'){
+              $user_id = $request->user_id;
+              $product_id = $request->product_id;
+              $star = $request->star;
+              $product_comment = $request->product_comment;
+              $count = RatingProduct::where('id_product', $product_id)->where('id_user', $user_id)->count('comment');
+              if($count == 0){
+                  $object = new RatingProduct();
+                  $user = Auth::user();
+                      $object->id_product = $product_id;
+                      $object->id_user = $user_id;
+                      $object->star = $star;
+                      $object->comment = $product_comment;
+                      $object->name = $user->name;
+                      $object->save();
+                      echo"Cảm ơn bạn đã đánh giá và
+                      nhận xét về sản phẩm !";
+              }
+              else echo"Bạn chỉ được rating 1 lần cho 1 sản phẩm !";
+          }
+      }
 }

@@ -4,11 +4,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Session;
 use App\Models\Department;
-
 use App\Models\Product;
 use App\Models\Cart;
-
-
 
 class CartController extends Controller
 {
@@ -17,39 +14,30 @@ class CartController extends Controller
         $new_department = $department->getDepartment();
         $oldCart = Session('cart')?Session::get('cart'):null;
         $cart = new Cart($oldCart);
-        // echo"<pre>";
-        // print_r($cart);
-        // echo"<pre>";
         return view('page.Cart',['cart'=>Session::get('cart'),'items'=>$cart->items,'totalPrice'=>$cart->totalPrice,'totalQty'=>$cart->totalQty]);
     }
-
-    public function getAddToCart(Request $req,$id, $qty){
+    public function getAddToCart(Request $req){
+      // dd($req->qty);
+      // die();
       $department = new Department();
        $new_department = $department->getDepartment();
-        $product = Product::find($id);
+        $product = Product::find($req->id);
         $oldCart = Session('cart')?Session::get('cart'):null;
         $cart = new Cart($oldCart);
-        $cart->add($product,$id,$qty);
+        $cart->add($product,$req->id,$req->qty);
         Session::put('cart',$cart);
-
-
         return redirect()->back();
-
         }
-
-
         public function removeFromCart(Request $req){
             $id = $req->id;
             $oldCart = Session('cart')?Session::get('cart'):null;
             $cart = new Cart($oldCart);
-
             $cart->totalQty -= $cart->items[$id]['qty'];
             $cart->totalPrice -= $cart->items[$id]['price'];
             Session::put('cart',$cart);
             unset(Session::get('cart')->items[$id]);
             return redirect()->back();
         }
-
         public function updateToCart(Request $req){
             $data = $req->all();
             $oldCart = null;
@@ -65,11 +53,7 @@ class CartController extends Controller
                         Session::put('cart',$cart);
                     }
                 }
-
             }
             return redirect()->back();
         }
-
-
-
 }

@@ -29,22 +29,25 @@
 			</div>
 			<div class="listing">
 				<h4 class="heading colr">New Products for March 2010</h4>
-				<ul> <?php $i=1; ?>
-
+				<ul> <?php $m=1; ?>
+           @if(count($Listing) ==0)
+				 <h2>Không có sản phẩm thuộc loại {{$nameListing->name}}</h2>
+					 @else
 						@foreach($Listing as $l)
-            @if(empty($l))
-					  Không có sản phẩm thuộc loại.{{$category['name']}};
-            @else
-
-						<li   <?php if($i % 4 == 0) echo 'class="last"'; $i++; ?> >
+						<li   <?php if($m % 4 == 0) echo 'class="last"'; $m++; ?> >
 								<a href="{{route('detail',$l['id'])}}" class="thumb"><img src="source/images/product/{{$l['img_url']}}" alt="" ></a>
 									<h6 class="colr">{{$l['name']}}</h6>
+									{{$Listing['category_id']}}
 									<div class="stars">
-										<a href="#"><img src="source/images/star_green.gif" alt="" ></a>
-											<a href="#"><img src="source/images/star_green.gif" alt="" ></a>
-											<a href="#"><img src="source/images/star_green.gif" alt="" ></a>
-											<a href="#"><img src="source/images/star_green.gif" alt="" ></a>
-											<a href="#"><img src="source/images/star_grey.gif" alt="" ></a>
+										<?php
+									for($i =0; $i < 5; $i++){
+										if($i < $rating){ ?>
+										<a href="#" name ="rate"><img src="source/images/star_green.gif" alt="" ></a>
+									<?php  }else { ?>
+										<a href="#" name ="rate"><img src="source/images/star_grey.gif" alt="" ></a>
+								<?php  }}
+										?>
+
 											<a href="#">({{$l['view']}}) Reviews</a>
 									</div>
 									<div class="addwish">
@@ -56,8 +59,9 @@
 											<p class="price">{{$l['price']}}</p>
 									</div>
 							</li>
-					@endif
+
 					@endforeach
+					@endif
 					</ul>
 			</div>
 

@@ -11,7 +11,7 @@
                     <a href="{{route('detail',$p['id'])}}"><img src="source/images/product/{{$p['img_url']}}" alt="" ></a>
                       <h6 class="colr">{{$p['name']}}</h6>
                       <p class="price bold">{{$p['price']}}</p>
-                      <a href="cart.html" class="adcart">Add to Cart</a>
+                      <a href="{{route('add_to_cart',['id'=>$p,'qty'=>$p->qty])}}" class="adcart">Add to Cart</a>
                   </li>
                   @endforeach
               </ul>
@@ -23,7 +23,6 @@
         <h4 class="heading colr">New Products for <?php echo date('F Y');?></h4>
           <ul> <?php $m=0; ?>
               @foreach($new_product as $p)
-
               <li   <?php if($m % 4 == 0) echo 'class="last"'; $m++; ?> >
                 <a href="{{route('detail',$p['id'])}}" class="thumb"><img src="source/images/product/{{$p['img_url']}}" alt="" ></a>
                   <h6 class="colr">{{$p['name']}}</h6>
@@ -38,7 +37,6 @@
                   <?php  }}
                       ?>
 
-
                       <a href="#">({{$p['view']}}) Reviews</a>
                         </form>
                   </div>
@@ -47,7 +45,7 @@
                       <a href="#">Add to Compare</a>
                   </div>
                   <div class="cart_price">
-                    <a href="{{route('add_to_cart',['id'=>$p,'qty'=>$p->qty])}}" class="adcart">Add to Cart</a>
+                    <a href="{{route('add_to_cart',['id'=>$p,'qty'=>1])}}" class="adcart">Add to Cart</a>
                       <p class="price">{{$p['price']}}</p>
                   </div>
               </li>
