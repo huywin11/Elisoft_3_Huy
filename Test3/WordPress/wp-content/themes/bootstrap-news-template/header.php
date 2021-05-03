@@ -58,20 +58,20 @@
                     <div class="row align-items-center">
                         <div class="col-lg-3 col-md-4">
                             <div class="b-logo">
-                                <a href="http://localhost/WordPress/">
+                                <a href="<?=site_url();?>">
                                   <?php $base = plugin_dir_url( __FILE__ ) ; ?>
-                                    <img src="<?php  $base; ?>img/<?php echo get_option( 'logo' ); ?>" alt="logo" width="198px" height="60px">
+                                    <img src="<?php  $base; ?><?=site_url();?>/<?php echo get_option( 'logo' ); ?>" alt="logo" width="198px" height="60px">
                                     <!-- <img src="img/logo.png" alt="Logo"> -->
                                 </a>
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-4">
                             <div class="b-ads">
-                                <a href="http://localhost/WordPress/">
+                                <a href="<?=site_url();?>">
 
                                     <?php $base = plugin_dir_url( __FILE__ ) ; ?>
 
-                                    <img src=" <?php $base?>img/<?php echo get_option( 'advertisement' ); ?>" alt="advertisement" width="540px" height="90px">
+                                    <img src=" <?php $base?><?=site_url();?>/<?php echo get_option( 'advertisement' ); ?>" alt="advertisement" width="540px" height="90px">
                                     <!-- <img src="img/ads-1.jpg" alt="Ads"> -->
                                 </a>
                             </div>
